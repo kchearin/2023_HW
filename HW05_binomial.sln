@@ -1,31 +1,26 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.34031.81
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HW05_binomial", "HW05_binomial\HW05_binomial.vcxproj", "{93481C77-537D-445B-83CC-854E72477C3D}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93481C77-537D-445B-83CC-854E72477C3D}.Debug|x64.ActiveCfg = Debug|x64
-		{93481C77-537D-445B-83CC-854E72477C3D}.Debug|x64.Build.0 = Debug|x64
-		{93481C77-537D-445B-83CC-854E72477C3D}.Debug|x86.ActiveCfg = Debug|Win32
-		{93481C77-537D-445B-83CC-854E72477C3D}.Debug|x86.Build.0 = Debug|Win32
-		{93481C77-537D-445B-83CC-854E72477C3D}.Release|x64.ActiveCfg = Release|x64
-		{93481C77-537D-445B-83CC-854E72477C3D}.Release|x64.Build.0 = Release|x64
-		{93481C77-537D-445B-83CC-854E72477C3D}.Release|x86.ActiveCfg = Release|Win32
-		{93481C77-537D-445B-83CC-854E72477C3D}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7F8503EF-8941-4102-99F5-EAA0E4FDB13B}
-	EndGlobalSection
-EndGlobal
+#include<iostream>
+#include <fstream>
+#include <cmath> // for pow()
+using namespace std;
+float factorial(int n) { if (n == 0 | n == 1) return 1; else return n * factorial(n - 1); }
+int main() {
+	float p, * biex, * bitheory;
+	int n, k, N = 100000, count;  // N number of experiment
+	n = 20;  p = 0.5;
+	biex = new float[n + 1];
+	bitheory = new float[n + 1];
+	for (k = 0; k <= n; k++) biex[k] = 0;
+	for (int nn = 0; nn < N; nn++) {
+		count = 0;
+		for (int j = 0; j < 10; j++) if ((rand() / (float)RAND_MAX) < p) count++;
+		biex[count]++;
+	} // nn
+	for (int k = 0; k <= n; k++) biex[k] /= (float)N; // count --> probability
+	ofstream xxx("binomial_p0.5.txt");
+	for (int k = 0; k <= n; k++) {
+		bitheory[k] = factorial(n) / factorial(k) / factorial(n - k) * pow(p, k) * pow((1 - p), n - k);
+		xxx << k << " " << bitheory[k] << " " << biex[k] << endl;
+	}
+	xxx.close();
+	return 1;
+}
